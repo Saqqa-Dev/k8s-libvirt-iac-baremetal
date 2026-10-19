@@ -1,0 +1,60 @@
+There is core information here.
+Hypervisor (Sanal Makine Yöneticisi): Fiziksel donanımı (CPU, RAM, Disk) bölerek üzerinde birden fazla sanal işletim sistemi çalıştırmayı sağlayan yazılım katmanıdır.
+KVM (Kernel-based Virtual Machine): Linux çekirdeğini doğrudan bir Type-1/Type-2 Hypervisor'e dönüştüren çekirdek modülüdür. Sanal makinelerin doğrudan işlemcinin sanallaştırma yeteneklerini (VT-x / AMD-V) kullanmasını sağlar.
+QEMU: Sanal makinenin donanımlarını (ekran kartı, disk denetleyicisi, ağ kartı) yazılımsal olarak taklit eden (emülasyon) işlemci ve donanım öykünücüsüdür. KVM ile birleştiğinde donanım hızlandırmalı sanallaştırma sunar.
+Libvirt: KVM, QEMU ve Xen gibi sanallaştırma teknolojilerini yönetmek için standart bir C kütüphanesi, daemon (libvirtd) ve yönetim aracı (virsh) sağlayan ortak API katmanıdır. Terraform, sanal makine açmak için doğrudan Libvirt API'si ile konuşur.
+virsh: Libvirt API'sini kullanarak komut satırından sanal makineleri (Domain) başlatmaya, durdurmaya ve yönetmeye yarayan CLI aracıdır.
+Bridge (Ağ Köprüsü): Sanal makinelerin fiziksel ağ kartına (veya yerel bir sanal anahtara) bağlanmasını sağlayan sanal bir L2 (Switch) anahtarlama yapısıdır.
+NAT (Network Address Translation): Sanal makinelerin kendi özel IP bloğunda (örneğin 192.168.122.0/24) kalmasını, dış dünyaya erişirken senin bilgisayarının IP'sini kullanmasını sağlayan ağ dönüştürme mekanizmasıdır.
+dnsmasq: KVM sanal ağına bağlanan makinelerin otomatik IP almasını (DHCP) ve birbirlerini isimleriyle bulmasını (DNS) sağlayan hafif bir servis.
+QCOW2 (QEMU Copy On Write): KVM'de kullanılan dinamik disk formatıdır. Disk alanı hemen dolmaz; makine içine veri yazıldıkça disk boyutu büyür.
+Terraform Provider: Terraform'un belirli bir platformla (AWS, Google Cloud, Libvirt, GitHub) konuşmasını sağlayan eklentidir. Biz bu projede dmacvicar/libvirt provider'ını kullanarak HCL kodlarımızı Libvirt API çağrılarına dönüştüreceğiz.
+Cloud-Init: Cloud imajlarının (Ubuntu Cloud Image .img) ilk açılışta otomatik yapılandırılmasını sağlayan standart araçtır. Sanal makineye klavye/ekran bağlamadan SSH key'lerini, kullanıcı adını, hostname'i ve statik IP'yi bu mekanizma ile enjekte ederiz.
+Meta-Data: Sanal makinenin kimlik bilgilerini tutar (instance-id, hostname).
+User-Data: Sanal makine açılırken çalışacak olan yapılandırma dosyasıdır (Kullanıcı oluşturma, SSH public key ekleme, paket yükleme).
+ISO Seed Disk: Cloud-Init verilerini (user-data ve meta-data) içeren ve Terraform tarafından dinamik olarak oluşturulup sanal makineye "sanal bir CD-ROM" gibi bağlanan küçük ISO disk imajıdır.
+
+Mimari ve Kavram Karşılaştırması A-AWS bulut ;B-Bare-Metal:
+Hypervisor (Donanım)
+A.AWS Nitro / Xen
+B.KVM / QEMU
+  
+IaC Provider
+A.hashicorp/aws
+B.dmacvicar/libvirt
+  
+Compute Resource
+A.aws_instance (EC2)
+B.libvirt_domain
+  
+Storage (Disk)
+A.EBS Volume / AMI (ami-0c5...)
+B.libvirt_volume + Ubuntu Cloud Image (.qcow2 / .img)
+
+Provisioning (Booster)
+A.user_data (EC2 başlangıç betiği)
+B.Cloud-Init (libvirt_cloudinit_disk -> ISO Seed Disk)
+  
+Networking
+A.VPC, Subnet, Internet Gateway, Security Group
+B.Libvirt Bridge / NAT Network, dnsmasq, iptables
+  
+Ansible Inventory
+A.amazon.aws.aws_ec2 (Dynamic Inventory via AWS API)
+B.Local File (hosts.ini) veya Terraform Output Feed
+
+Ansible Playbook
+A.%95-100 Aynı (containerd, kubeadm, Swap)
+B.%95-100 Aynı (containerd, kubeadm, Swap)
+
+KVM / QEMU ~~~~ AWS Nitro Hypervisor  (Donanım üzerinde sanal makinelerin çalışmasını sağlayan temel sanallaştırma motoru.)
+Libvirt (libvirtd) ~~~~ AWS Control Plane / EC2 API (Hypervisor ile konuşan, "makine aç/kapa, disk bağla, ağ oluştur" emirlerini alan yönetim servisi/API'si.)
+virsh CLI ~~~~ AWS CLI (aws ec2 ...) (Terminalden sanal makineleri, ağları ve diskleri manuel yönetmeye yarayan komut satırı aracı.)
+dmacvicar/libvirt ~~~~ hashicorp/aws (Terraform'un ilgili API ile haberleşmesini sağlayan HCL sağlayıcısı (Provider).)
+libvirt_domain ~~~~ aws_instance (EC2) (Bizzat oluşturulan Sanal Makine (VM) kaynağı.)
+libvirt_volume ~~~~ EBS Volume / AMI (Sanal makinenin işletim sistemini barındıran veya ek depolama sağlayan sanal disk.)
+libvirt_pool ~~~~ AWS EBS Storage Pool / S3 (Sanal disk imajlarının (.qcow2, .img) depolandığı fiziki veya mantıksal disk alanı.)
+libvirt_network ~~~~ AWS VPC + Subnet (Sanal makinelerin birbiriyle ve dış dünyayla haberleştiği sanal ağ izolasyonu.)
+dnsmasq ~~~~ AWS VPC DHCP Option Sets + Route 53 Resolver (Sanal ağdaki makinelere otomatik IP dağıtan (DHCP) ve iç DNS çözen hafif servis.)
+Linux Bridge (virbr0) ~~~~ AWS Virtual Private Gateway / Transit Gateway (Sanal makinelerin ağ kartlarını mantıksal olarak aynı L2 şebekesine bağlayan sanal switch.)
+libvirt_cloudinit_disk ~~~~ EC2 User Data (user_data) (Makine ilk açıldığında içine kullanıcı, SSH key ve statik IP enjekte eden mekanizma (Seed ISO).)
