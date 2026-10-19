@@ -1,1 +1,9 @@
 hey !
+📌 Proje Genel Yol Haritası
+Aşama 0 (Sistem & Ortam Hazırlığı): KVM/Libvirt sanallaştırma katmanının, gerekli sistem paketlerinin ve Terraform Libvirt provider bağımlılıklarının yerel Linux makinesine kurulumu ve doğrulanması.
+Aşama 1 (Terraform & Cloud-Init ile Altyapı): HCL modülleri, Ubuntu Cloud Image, Cloud-Init (ISO) entegrasyonu ve 3 adet VM'in (1 Master, 2 Worker) statik IP ve SSH erişimiyle ayağa kaldırılması.
+Aşama 2 (Ansible ile İşletim Sistemi Yapılandırması): Swap alanlarının kapatılması, kernel modülleri (overlay, br_netfilter), IP forwarding ve containerd runtime kurulumu.
+Aşama 3 (Kubernetes Bootstrapping): Master düğümde kubeadm init çalıştırılması, join token elde edilerek Worker düğümlerin kümeye dahil edilmesi.
+Aşama 4 (Pod Networking & Cluster Verification): CNI (Calico) eklentisinin uygulanması, düğümlerin ve sistem pod'larının Ready durumunun doğrulanması.
+
+**Aşama 0 (Sistem & Ortam Hazırlığı)
