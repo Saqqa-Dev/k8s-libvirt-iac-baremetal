@@ -58,3 +58,5 @@ libvirt_network ~~~~ AWS VPC + Subnet (Sanal makinelerin birbiriyle ve dış dü
 dnsmasq ~~~~ AWS VPC DHCP Option Sets + Route 53 Resolver (Sanal ağdaki makinelere otomatik IP dağıtan (DHCP) ve iç DNS çözen hafif servis.)
 Linux Bridge (virbr0) ~~~~ AWS Virtual Private Gateway / Transit Gateway (Sanal makinelerin ağ kartlarını mantıksal olarak aynı L2 şebekesine bağlayan sanal switch.)
 libvirt_cloudinit_disk ~~~~ EC2 User Data (user_data) (Makine ilk açıldığında içine kullanıcı, SSH key ve statik IP enjekte eden mekanizma (Seed ISO).)
+
+BIOS (Basic Input/Output System - Temel Giriş/Çıkış Sistemi), bilgisayarın güç düğmesine bastığınız anda çalışan ilk donanım yazılımıdır (firmware).
