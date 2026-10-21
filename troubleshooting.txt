@@ -2,19 +2,4 @@
 CMD üzerinden:
 cd /d "C:\Program Files\Oracle\VirtualBox"
 VBoxManage modifyvm "Sanal_Makine_Adiniz" --nested-hw-virt on
-**Eğer sıfırdan bir sunucuda bu ayarı yapmak istersek:
-
-Adım 1: Fiziksel Donanım ve BIOS Kontrolü (Temel Güç Bağlantısı)
-BIOS / UEFI Ayarları: Sunucuyu açıp BIOS'a girersiniz. İşlemci sanallaştırma özelliklerinin (Intel VT-x veya AMD-V / SVM) açık olduğundan emin olursunuz.
-Disk RAID Yapılandırması: Şirket sunucularında tek bir disk kullanılmaz. Veri güvenliği için RAID (genellikle RAID 1 veya RAID 10) yapılandırılarak diskler donanımsal veya yazılımsal olarak yedekli hale getirilir.
-RAM ve CPU Kontrolü: Sunucunun donanım kapasitesi (örneğin 128 GB RAM, 32 çekirdek) doğrulanır.
-
-Adım 2: İşletim Sistemi Kurulumu (Bare-Metal OS)
-Seçim: Genellikle kurumsal dünyada kararlılığı ve uzun vadeli desteği nedeniyle Ubuntu Server LTS (örneğin 22.04 veya 24.04) veya Debian tercih edilir.
-Kurulum: ISO dosyası bir USB belleğe yazdırılarak sunucuya kurulur. Bu aşamada sunucuya güçlü bir root şifresi verilir ve güvenli SSH anahtarları (SSH Key) tanımlanır.
-
-Adım 3: Kurumsal Ağ (Network) Yapılandırması ve Köprü (Bridge) Kurulumu
-Statik IP: Şirket bilgi işlem departmanından sunucu için sabit (statik) bir IP adresi alıp sunucuya tanımlarsınız.
-KVM Network Bridge (br0): Şirket ağındaki diğer bilgisayarların, bu sunucu üzerinde kuracağımız sanal makinelere (Kubernetes düğümlerine) doğrudan erişebilmesi için fiziksel Ethernet kartı üzerinde bir Bridge (Köprü) ağı oluşturmanız gerekir. Bu, sanal makinelerin şirketin yerel ağında sanki fiziksel birer bilgisayar gibi IP almasını sağlar.
-
 2. 
