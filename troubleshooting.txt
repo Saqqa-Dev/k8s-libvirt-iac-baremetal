@@ -1,0 +1,1 @@
+Hardware Virtualization Supporting problem on Oracle Vbox manager . Sanallaştırma desteği 0 dönüyor ve varsayılan olarak vm oluşturulurken değiştiremedim. makine üzerinden bunu manuel yapmam gereklidir.:
