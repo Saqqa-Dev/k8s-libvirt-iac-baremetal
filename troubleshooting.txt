@@ -1,1 +1,6 @@
-Hardware Virtualization Supporting problem on Oracle Vbox manager . Sanallaştırma desteği 0 dönüyor ve varsayılan olarak vm oluşturulurken değiştiremedim. makine üzerinden bunu manuel yapmam gereklidir.:
+1. Hardware Virtualization Supporting problem on Oracle Vbox manager . Sanallaştırma desteği 0 dönüyor ve varsayılan olarak vm oluşturulurken değiştiremedim. makine üzerinden bunu manuel yapmam gereklidir.:
+CMD üzerinden:
+cd /d "C:\Program Files\Oracle\VirtualBox"
+VBoxManage modifyvm "Sanal_Makine_Adiniz" --nested-hw-virt on
+
+2. 
