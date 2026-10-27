@@ -1,4 +1,3 @@
-hey !
 📌 Proje Genel Yol Haritası
 Aşama 0 (Sistem & Ortam Hazırlığı): KVM/Libvirt sanallaştırma katmanının, gerekli sistem paketlerinin ve Terraform Libvirt provider bağımlılıklarının yerel Linux makinesine kurulumu ve doğrulanması.
 Aşama 1 (Terraform & Cloud-Init ile Altyapı): HCL modülleri, Ubuntu Cloud Image, Cloud-Init (ISO) entegrasyonu ve 3 adet VM'in (1 Master, 2 Worker) statik IP ve SSH erişimiyle ayağa kaldırılması.
