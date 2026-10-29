@@ -6,13 +6,21 @@ Aşama 3 (Kubernetes Bootstrapping): Master düğümde kubeadm init çalıştır
 Aşama 4 (Pod Networking & Cluster Verification): CNI (Calico) eklentisinin uygulanması, düğümlerin ve sistem pod'larının Ready durumunun doğrulanması.
 
 **Aşama 0 (Sistem & Ortam Hazırlığı)
+0.****
+cat /etc/wsl.conf
+ps -p 1 -o comm=   #Son komut systemd yazmalı.yazmıyorsa , add:
+sudo nano /etc/wsl.conf
+içine şunu ekle:
+[boot]
+systemd=true
 1.Donanım Sanallaştırma Desteğini Doğrulama:
+ls -l /dev/kvm
 egrep -c '(vmx|svm)' /proc/cpuinfo
 ****Eğer VirtualBox kullanıyorsanız:
 Sanal makinenizi tamamen kapatın. VirtualBox ana penceresinde makinenin Ayarlar (Settings) > Sistem (System) > İşlemci (Processor) sekmesine gidin ve "Enable Nested VT-x/AMD-V" (İç İçe VT-x/AMD-V Etkinleştir) kutucuğunu işaretleyin.
 2.KVM, QEMU ve Libvirt Paketlerini Yükleme:
 sudo apt update
-sudo apt install -y qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils virtinst ebtables dnsmasq-base genisoimage git curl
+sudo apt install -y qemu-kvm libvirt-daemon-system libvirt-clients dnsmasq-base cloud-image-utils genisoimage cpu-checker virtinst
 3.Sudo-less Libvirt Yetkilendirmesi:
 sudo usermod -aG libvirt $USER
 sudo usermod -aG kvm $USER
