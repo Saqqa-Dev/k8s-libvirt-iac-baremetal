@@ -67,3 +67,18 @@ Inventory	Ansible’ın hangi makinelere bağlanacağını bildiği liste
 Cloud-init	VM ilk açıldığında kullanıcı, SSH key, ağ gibi ayarları uygulayan mekanizma
 Base image	Kopyalanarak çoğaltılan hazır işletim sistemi diski
 Control plane	Kubernetes’in beyni (master düğüm)
+
+*Tools/packets
+1.qemu-kvm - QEMU’nun sanal makine çalıştıran kısmını kurar. Ubuntu 24.04'te bu aslında bir geçiş paketidir, asıl iş qemu-system-x86 ve ilgili paketlerle yapılır. Sanal makineleri gerçekten çalıştıran bileşen budur.
+2.libvirt-daemon-system - libvirtd servisini kurar ve systemd ile başlatılmasını ayarlar. Varsayılan sanal ağı (default, virbr0) ve libvirt/kvm gruplarını bu paket oluşturur. Sanal makinelerin ve ağların yaşam döngüsünü yöneten arka plan hizmetidir.
+3.libvirt-clients - Servisle konuşan komut satırı araçlarını getirir. En önemlisi virsh’tir: virsh list --all, virsh start, virsh net-list gibi komutlar buradan gelir.
+4.dnsmasq-base - Küçük bir DHCP ve DNS sunucusudur. libvirt, sanal ağdaki VM’lere IP adresi vermek ve isim çözümlemek için bunu arka planda kendisi çalıştırır. Sen doğrudan kullanmazsın, ama ağ bunsuz kalkmaz. -base eki, kendi servisini sistemde ayrıca başlatmayan hafif sürüm olduğunu belirtir.
+5.cloud-image-utils - Cloud-init ile ilgili araçları verir. cloud-localds komutu, kullanıcı adı, SSH anahtarı ve hostname gibi ayarları içeren küçük bir ISO diski hazırlar. VM ilk açılışında bu diski okuyup kendini yapılandırır. Terraform bunu senin yerine yapabilir, ama elle denemek ve mantığı öğrenmek için çok işe yarar.
+6.genisoimage - ISO 9660 disk imajı oluşturan araçtır (mkisofs ile aynı işi görür). Cloud-init ayar diski bir ISO olarak hazırlanır. Bazı araçlar ve provider sürümleri bu programa ihtiyaç duyabilir.
+7.cpu-checker - Tek işi kvm-ok komutunu getirmektir. Bu komut donanımın KVM’yi destekleyip desteklemediğini ve /dev/kvm aygıtının kullanılabilir olduğunu söyler. Sorun giderirken ilk bakılan yerdir. WSL’de iç içe sanallaştırmanın açık olup olmadığını anlamak için özellikle faydalıdır.
+8.virtinst - virt-install komutunu getirir. Komut satırından yeni sanal makine oluşturur, ISO’dan işletim sistemi kurar ya da hazır disk imajını bağlar. Terraform’la iş yaparken şart değil, ama bir VM’i Terraform’sız elle ayağa kaldırarak katmanları anlamak için güzel bir araçtır.
+****
+DHCP - ağa bağlanan cihazlara otomatik IP adresi dağıtan hizmettir
+DNS -  isimleri IP adreslerine çeviren sistemdir. google.com yazdığında bilgisayar onun hangi IP’de olduğunu DNS’e sorar.
+
+
