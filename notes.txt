@@ -29,6 +29,7 @@ newgrp libvirt
 sudo systemctl enable --now libvirtd
 virsh nodeinfo
 Powershell
+Get-CimInstance Win32_ComputerSystem  (to learn how many you have memory size (RAM))
 notepad $env:USERPROFILE\.wslconfig   #get changes  how much to need on hyperviser
 ***
 Eğer sıfırdan bir sunucuda bu ayarı yapmak istersek:
