@@ -28,6 +28,8 @@ newgrp libvirt
 4.Libvirt Daemon'ını Başlatma ve Hypervisor Kontrolü:
 sudo systemctl enable --now libvirtd
 virsh nodeinfo
+Powershell
+notepad $env:USERPROFILE\.wslconfig   #get changes  how much to need on hyperviser
 ***
 Eğer sıfırdan bir sunucuda bu ayarı yapmak istersek:
 
