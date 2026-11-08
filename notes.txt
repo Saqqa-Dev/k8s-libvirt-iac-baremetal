@@ -5,6 +5,7 @@ Aşama 2 (Ansible ile İşletim Sistemi Yapılandırması): Swap alanlarının k
 Aşama 3 (Kubernetes Bootstrapping): Master düğümde kubeadm init çalıştırılması, join token elde edilerek Worker düğümlerin kümeye dahil edilmesi.
 Aşama 4 (Pod Networking & Cluster Verification): CNI (Calico) eklentisinin uygulanması, düğümlerin ve sistem pod'larının Ready durumunun doğrulanması.
 
+current condition: Step 0 has been completed;
 **Aşama 0 (Sistem & Ortam Hazırlığı)
 0.****
 cat /etc/wsl.conf
@@ -48,3 +49,15 @@ Statik IP: Şirket bilgi işlem departmanından sunucu için sabit (statik) bir 
 KVM Network Bridge (br0): Şirket ağındaki diğer bilgisayarların, bu sunucu üzerinde kuracağımız sanal makinelere (Kubernetes düğümlerine) doğrudan erişebilmesi için fiziksel Ethernet kartı üzerinde bir Bridge (Köprü) ağı oluşturmanız gerekir. Bu, sanal makinelerin şirketin yerel ağında sanki fiziksel birer bilgisayar gibi IP almasını sağlar.
 
 ***
+Aşama 1 (Terraform & Cloud-Init ile Altyapı):
+Aşama 1'in hedefi: terraform apply yazınca 3 VM kendiliğinden açılsın, sabit IP’leri olsun ve sen SSH ile girebilesin. Bunu altı küçük adıma bölüyoruz. Her adımın sonunda plan → apply → doğrula → commit yapacaksın.
+
+Adım	Ne kurulacak	Okunacak kaynak
+1.1	Provider + terraform init	Registry: provider ana sayfası
+dmaciavar/libvirt >>> https://registry.terraform.io/providers/dmacvicar/libvirt/latest/docs#example-usage
+add version constarints >>> https://developer.hashicorp.com/terraform/language/v1.16.x/expressions/version-constraints
+1.2	Sanal ağ (192.168.100.0/24)	Registry: libvirt_network
+1.3	Storage pool + base image + VM diskleri	Registry: libvirt_pool, libvirt_volume
+1.4	SSH anahtarı + cloud-init (kullanıcı, hostname, statik IP)	cloudinit.readthedocs.io + Registry’de cloud-init kaynağı
+1.5	VM’ler (libvirt_domain)	Registry: libvirt_domain
+1.6	Output’lar ve SSH ile doğrulama	Terraform docs: Outputs
