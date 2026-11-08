@@ -54,6 +54,8 @@ Aşama 1'in hedefi: terraform apply yazınca 3 VM kendiliğinden açılsın, sab
 
 Adım	Ne kurulacak	Okunacak kaynak
 1.1	Provider + terraform init	Registry: provider ana sayfası
+dmaciavar/libvirt >>> https://registry.terraform.io/providers/dmacvicar/libvirt/latest/docs#example-usage
+add version constarints >>> https://developer.hashicorp.com/terraform/language/v1.16.x/expressions/version-constraints
 1.2	Sanal ağ (192.168.100.0/24)	Registry: libvirt_network
 1.3	Storage pool + base image + VM diskleri	Registry: libvirt_pool, libvirt_volume
 1.4	SSH anahtarı + cloud-init (kullanıcı, hostname, statik IP)	cloudinit.readthedocs.io + Registry’de cloud-init kaynağı
