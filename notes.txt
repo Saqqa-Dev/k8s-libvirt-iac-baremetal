@@ -52,11 +52,15 @@ KVM Network Bridge (br0): Şirket ağındaki diğer bilgisayarların, bu sunucu 
 Aşama 1 (Terraform & Cloud-Init ile Altyapı):
 Aşama 1'in hedefi: terraform apply yazınca 3 VM kendiliğinden açılsın, sabit IP’leri olsun ve sen SSH ile girebilesin. Bunu altı küçük adıma bölüyoruz. Her adımın sonunda plan → apply → doğrula → commit yapacaksın.
 
-Adım	Ne kurulacak	Okunacak kaynak
+Adım	Ne kurulacak	Okunacak kaynak (>>terraform fmt/init/plan/apply<<)
 1.1	Provider + terraform init	Registry: provider ana sayfası
 dmaciavar/libvirt >>> https://registry.terraform.io/providers/dmacvicar/libvirt/latest/docs#example-usage
 add version constarints >>> https://developer.hashicorp.com/terraform/language/v1.16.x/expressions/version-constraints
 1.2	Sanal ağ (192.168.100.0/24)	Registry: libvirt_network
+virsh net-***(dumpxml,list) nat-name(default/k8snet etc.)
+Pulumi >>> libvirt.Network >> Constructor example
+dmacivar/libvrt >> Registry Terraform >> libvirt_network
+Libvirt Virtualization API >> Network XML format >> See: https://libvirt.org/formatnetwork.html#addressing (see below for nested schema)
 1.3	Storage pool + base image + VM diskleri	Registry: libvirt_pool, libvirt_volume
 1.4	SSH anahtarı + cloud-init (kullanıcı, hostname, statik IP)	cloudinit.readthedocs.io + Registry’de cloud-init kaynağı
 1.5	VM’ler (libvirt_domain)	Registry: libvirt_domain
