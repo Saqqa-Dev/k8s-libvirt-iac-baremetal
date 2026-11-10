@@ -1,5 +1,6 @@
+# Network Structura
 resource "libvirt_network" "kube_network" {
-  name = "k8snet"
+  name      = "k8snet"
   autostart = true
   bridge = {
     name = "virbr-k8s"
@@ -25,3 +26,25 @@ resource "libvirt_network" "kube_network" {
   ]
 
 }
+# Storage Pool
+resource "libvirt_pool" "kube_pool" {
+  name = "k8spool"
+  type = "dir"
+  target = {
+    path = "/var/lib/libvirt/storage/images/pool_img/"
+    permissions = {
+      group = "0"
+      mode  = "0711"
+      owner = "0"
+    }
+  }
+  create = {
+    autostart = true
+    build     = true
+    start     = true
+  }
+  destroy = {
+    delete = false
+  }
+}
+
