@@ -1,6 +1,7 @@
 # Created by https://www.toptal.com/developers/gitignore/api/terraform,ansible,linux,python
 # Edit at https://www.toptal.com/developers/gitignore?templates=terraform,ansible,linux,python
-
+SHA256SUMS  
+*.img
 ### Ansible ###
 *.retry
 
